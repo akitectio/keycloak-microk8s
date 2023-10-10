@@ -27,37 +27,39 @@ spec:
           value: "edge"
         - name: jgroups.dns.query
           value: "keycloak"
-        - name: PROXY_ADDRESS_FORWARDING
-          value: "true"
+        - name: KC_HOSTNAME_STRICT
+          value: "false"
         - name: KC_HEALTH_ENABLED
           value: "true"
         - name: KC_METRICS_ENABLED
           value: "true"
         - name: KC_HTTP_ENABLED
           value: "true"
-        - name: KC_HTTP_RELATIVE_PATH
-          value: "/auth"
-        # - name: KC_HOSTNAME_URL
-        #   value: "https://domain-name.com/keycloak/auth/"
-        # - name: KC_HOSTNAME_ADMIN_URL
-        #   value: "https://domain-name.com/keycloak/auth/"
         - name: KC_DB
-          value: "mysql"
-        - name: KC_DB_URL
-          value: "jdbc:mysql://mysql/keycloak"
-        - name: KC_DB_URL_HOST
-          value: "mysql"
-        - name: KC_DB_URL_PORT
-          value: "3306"
-        - name: KC_DB_URL_DATABASE
-          value: "keycloak"
-        - name: KC_DB_USERNAME
-          value: "root"
+          value: "postgres"
         - name: KC_DB_PASSWORD
-          value: "password"
-
+          value: PassKhongChilaPasss
+        - name: KC_DB_USERNAME
+          value: postgres
+        - name: KC_DB_URL_PORT
+          value: "5432"
+        - name: KC_DB_URL_HOST
+          value: 10.86.224.19
+        - name: CACHE_OWNERS_COUNT
+          value: "2"
+        - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
+          value: "2"          
         ports:
-        - name: http
-          containerPort: 8080
-        - name: jgroups
-          containerPort: 7600
+          - name: jgroups
+            containerPort: 7600
+          - name: https
+            containerPort: 8443
+          - name: http
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 1
